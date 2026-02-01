@@ -9,6 +9,7 @@ class AuthService
 {
     protected UserRepository $users;
     protected UserApiTokenRepository $tokens;
+    protected int $tokenExpirationDays = 30;
 
     public function __construct(UserRepository $users, UserApiTokenRepository $tokens)
     {
@@ -26,14 +27,31 @@ class AuthService
 
         $rawToken = bin2hex(random_bytes(12));
         $hashedToken = hash('sha256', random_bytes(10));
-        $expiresAt = date('Y-m-d H:i:s', strtotime('+30 days'));
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+' . $this->tokenExpirationDays . ' days'));
 
         $this->tokens->createToken((int)$user['user_id'], $hashedToken, $expiresAt);
+
+        $this->setCookie($rawToken);
 
         return [
             'user' => $user,
             'token' => $rawToken,
             'expires_at' => $expiresAt
         ];
+    }
+
+    public function setCookie($token): void
+    {
+        setcookie(
+            'access_token',
+            $token,
+            [
+                'expires' => time() + 60 * 60 * 24 * $this->tokenExpirationDays,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]
+        );
     }
 }

@@ -30,4 +30,6 @@ $container = $builder->build();
 
 $app = SlimBridge::create($container);
 
+$app->add(new \App\Middleware\CorsMiddleware());
+
 $app->addBodyParsingMiddleware();
