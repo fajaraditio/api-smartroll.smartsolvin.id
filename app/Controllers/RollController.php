@@ -20,7 +20,7 @@ class RollController
 
     public function getById(Request $request, Response $response, array $args = []): Response
     {
-        $id = $args['id'] ?? null;
+        $id = $args['id'] ?? $request->getAttribute('id') ?? null;
 
         if (!$id) {
             $response->getBody()->write(json_encode([
@@ -128,7 +128,8 @@ class RollController
 
     public function update(Request $request, Response $response, array $args = []): Response
     {
-        $id = $args['id'] ?? null;
+        $id = $args['id'] ?? $request->getAttribute('id') ?? null;
+
         if (!$id) {
             $response->getBody()->write(json_encode([
                 'success' => false,
@@ -183,7 +184,8 @@ class RollController
 
     public function delete(Request $request, Response $response, array $args = []): Response
     {
-        $id = $args['id'] ?? null;
+        $id = $args['id'] ?? $request->getAttribute('id') ?? null;
+        
         if (!$id) {
             $response->getBody()->write(json_encode([
                 'success' => false,
