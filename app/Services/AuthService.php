@@ -43,6 +43,8 @@ class AuthService
 
     public function logout(): void
     {
+        logger('info', 'Attempting to log out user');
+
         if (isset($_COOKIE['access_token'])) {
             $rawToken       = $_COOKIE['access_token'];
             $hashedToken    = hash('sha256', $rawToken);
