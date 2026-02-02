@@ -41,6 +41,9 @@ class CorsMiddleware implements MiddlewareInterface
             ->withHeader("Access-Control-Allow-Methods", $this->config["methods"])
             ->withHeader("Access-Control-Allow-Headers", $this->config["headers"])
             ->withHeader("Access-Control-Allow-Credentials", $this->config["credentials"] ? "true" : "false")
-            ->withHeader("Access-Control-Max-Age", (string)$this->config["max_age"]);
+            ->withHeader("Access-Control-Max-Age", (string)$this->config["max_age"])
+            ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->withHeader('Pragma', 'no-cache')
+            ->withHeader('Expires', '0');
     }
 }
