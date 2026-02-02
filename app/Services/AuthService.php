@@ -26,7 +26,7 @@ class AuthService
         }
 
         $rawToken = bin2hex(random_bytes(12));
-        $hashedToken = hash('sha256', random_bytes(10));
+        $hashedToken = hash('sha256', $rawToken);
         $expiresAt = date('Y-m-d H:i:s', strtotime('+' . $this->tokenExpirationDays . ' days'));
 
         $this->tokens->createToken((int)$user['user_id'], $hashedToken, $expiresAt);
