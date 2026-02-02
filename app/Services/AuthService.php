@@ -45,8 +45,6 @@ class AuthService
         $hashedToken = hash('sha256', $token);
         $user = $this->tokens->findUserByToken($hashedToken);
 
-        logger('info', 'Fetching user by token', ['token' => $hashedToken, 'user' => $user]);
-
         if (!$user) return null;
 
         return $user;
