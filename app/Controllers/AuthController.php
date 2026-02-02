@@ -55,6 +55,17 @@ class AuthController
         return $response->withHeader('Content-Type', 'application/json');
     }
 
+    public function logout(Request $request, Response $response, array $args = []): Response
+    {
+        $this->service->removeCookie();
+
+        $response->getBody()->write(json_encode([
+            'message' => 'Logged out successfully'
+        ]));
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+
     public function me(Request $request, Response $response, array $args = []): Response
     {
         $accessToken = $_COOKIE['access_token'] ?? null;

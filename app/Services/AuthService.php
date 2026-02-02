@@ -66,4 +66,20 @@ class AuthService
             ]
         );
     }
+
+    public function removeCookie(): void
+    {
+        setcookie(
+            'access_token',
+            '',
+            [
+                'expires' => time() - 3600,
+                'path' => '/',
+                'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
+                'secure' => env('APP_ENV', 'production') === 'production',
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]
+        );
+    }
 }

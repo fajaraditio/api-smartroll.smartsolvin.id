@@ -14,6 +14,7 @@ $app->get('/', function (Request $request, Response $response) {
 $app->group('/auth', function (RouteCollectorProxy $group) {
     $group->get('/me',       [App\Controllers\AuthController::class, 'me']);
     $group->post('/login',   [App\Controllers\AuthController::class, 'login']);
+    $group->post('/logout',  [App\Controllers\AuthController::class, 'logout']);
 });
 
 $app->group('/rolls', function (RouteCollectorProxy $group) {
