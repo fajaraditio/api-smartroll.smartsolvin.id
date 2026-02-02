@@ -47,6 +47,8 @@ class AuthService
             $rawToken       = $_COOKIE['access_token'];
             $hashedToken    = hash('sha256', $rawToken);
 
+            logger('info', 'Logging out token: ' . $hashedToken);
+
             $this->tokens->deleteToken($hashedToken);
         }
 
