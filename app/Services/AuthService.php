@@ -61,7 +61,7 @@ class AuthService
                 'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
                 'secure' => env('APP_ENV', 'production') === 'production',
                 'httponly' => true,
-                'samesite' => 'Lax'
+                'samesite' => 'Strict'
             ]
         );
     }
