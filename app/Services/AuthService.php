@@ -35,10 +35,21 @@ class AuthService
         $this->setCookie($rawToken);
 
         return [
-            'user' => $user,
-            'token' => $rawToken,
-            'expires_at' => $expiresAt
+            'user'          => $user,
+            'token'         => $rawToken,
+            'expires_at'    => $expiresAt
         ];
+    }
+
+    public function logout(): void
+    {
+        if (isset($_COOKIE['access_token'])) {
+            $rawToken = $_COOKIE['access_token'];
+            $hashedToken = hash('sha256', $rawToken);
+            $this->tokens->deleteToken($hashedToken);
+        }
+
+        $this->removeCookie();
     }
 
     public function getUserByToken(string $token): ?array
@@ -69,27 +80,17 @@ class AuthService
 
     public function removeCookie(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        session_destroy();
-
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-
-            setcookie(
-                'access_token',
-                '',
-                [
-                    'expires' => time() - 3600,
-                    'path' => '/',
-                    'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
-                    'secure' => env('APP_ENV', 'production') === 'production',
-                    'httponly' => true,
-                    'samesite' => 'Strict'
-                ]
-            );
-        }
+        setcookie(
+            'access_token',
+            '',
+            [
+                'expires' => time() - 3600,
+                'path' => '/',
+                'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
+                'secure' => env('APP_ENV', 'production') === 'production',
+                'httponly' => true,
+                'samesite' => 'Strict'
+            ]
+        );
     }
 }

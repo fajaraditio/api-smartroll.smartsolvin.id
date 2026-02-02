@@ -57,7 +57,7 @@ class AuthController
 
     public function logout(Request $request, Response $response, array $args = []): Response
     {
-        $this->service->removeCookie();
+        $this->service->logout();
 
         $response->getBody()->write(json_encode([
             'message' => 'Logged out successfully'

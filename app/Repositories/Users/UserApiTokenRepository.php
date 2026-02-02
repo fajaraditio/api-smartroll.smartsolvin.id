@@ -27,4 +27,12 @@ class UserApiTokenRepository extends BaseRepository
             ['token' => $token]
         );
     }
+
+    public function deleteToken(string $token): int
+    {
+        return $this->execute(
+            "DELETE FROM user_api_tokens WHERE token = :token",
+            ['token' => $token]
+        );
+    }
 }
