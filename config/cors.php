@@ -4,7 +4,7 @@ return [
     "origins" => [
         "https://smartroll.smartsolvin.id",
         "https://smartroll.smartsolvin.test",
-        "http://localhost:5173/"
+        "http://localhost:5173"
     ],
 
     "methods" => "GET, POST, PUT, PATCH, DELETE, OPTIONS",

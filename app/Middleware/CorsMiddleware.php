@@ -17,58 +17,30 @@ class CorsMiddleware implements MiddlewareInterface
         }
     }
 
-    public function process(
-        ServerRequestInterface $request,
-        RequestHandlerInterface $handler
-    ): ResponseInterface {
-        $origin = $request->getHeaderLine("Origin");
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $origin = rtrim($request->getHeaderLine("Origin"), "/");
 
-        $isAllowed = in_array(
-            $origin,
-            $this->config["origins"] ?? [],
-            true
-        );
+        $isAllowed = in_array($origin, $this->config["origins"] ?? [], true);
 
+        // Handle preflight
         if ($request->getMethod() === "OPTIONS") {
-            $response = new Response();
-
-            if ($isAllowed) {
-                $response = $this->withCorsHeaders($response, $origin);
-            }
-
-            return $response;
+            $response = new Response(204);
+            return $isAllowed ? $this->withCorsHeaders($response, $origin) : $response;
         }
 
         $response = $handler->handle($request);
 
-        if ($isAllowed) {
-            $response = $this->withCorsHeaders($response, $origin);
-        }
-
-        return $response;
+        return $isAllowed ? $this->withCorsHeaders($response, $origin) : $response;
     }
 
-    private function withCorsHeaders(
-        ResponseInterface $response,
-        string $origin
-    ): ResponseInterface {
+    private function withCorsHeaders(ResponseInterface $response, string $origin): ResponseInterface
+    {
         return $response
             ->withHeader("Access-Control-Allow-Origin", $origin)
-            ->withHeader(
-                "Access-Control-Allow-Methods",
-                $this->config["methods"]
-            )
-            ->withHeader(
-                "Access-Control-Allow-Headers",
-                $this->config["headers"]
-            )
-            ->withHeader(
-                "Access-Control-Allow-Credentials",
-                $this->config["credentials"] ? "true" : "false"
-            )
-            ->withHeader(
-                "Access-Control-Max-Age",
-                (string) $this->config["max_age"]
-            );
+            ->withHeader("Access-Control-Allow-Methods", $this->config["methods"])
+            ->withHeader("Access-Control-Allow-Headers", $this->config["headers"])
+            ->withHeader("Access-Control-Allow-Credentials", $this->config["credentials"] ? "true" : "false")
+            ->withHeader("Access-Control-Max-Age", (string)$this->config["max_age"]);
     }
 }
