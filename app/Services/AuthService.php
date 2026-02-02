@@ -40,6 +40,18 @@ class AuthService
         ];
     }
 
+    public function getUserByToken(string $token): ?array
+    {
+        $hashedToken = hash('sha256', $token);
+        $user = $this->tokens->findUserByToken($hashedToken);
+
+        if (!$user) {
+            return null;
+        }
+
+        return $user;
+    }
+
     public function setCookie($token): void
     {
         setcookie(

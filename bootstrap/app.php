@@ -8,6 +8,8 @@ use DI\ContainerBuilder;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+$debugMode = env('APP_DEBUG', false);
+
 $builder = new ContainerBuilder();
 $builder->useAutowiring(true);
 $builder->useAttributes(false);
@@ -30,6 +32,7 @@ $container = $builder->build();
 
 $app = SlimBridge::create($container);
 
+$app->addErrorMiddleware($debugMode, $debugMode, $debugMode);
 $app->add(new \App\Middleware\CorsMiddleware());
 
 $app->addBodyParsingMiddleware();

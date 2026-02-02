@@ -54,4 +54,31 @@ class AuthController
 
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function me(Request $request, Response $response, array $args = []): Response
+    {
+        $token = $_COOKIE['access_token'] ?? null;
+
+        if (!$token) {
+            $response->getBody()->write(json_encode(['error' => 'Unauthenticated']));
+
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withStatus(401);
+        }
+
+        $user = $this->service->getUserByToken($token);
+
+        if (!$user) {
+            $response->getBody()->write(json_encode(['error' => 'Unauthenticated']));
+
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withStatus(401);
+        }
+
+        $response->getBody()->write(json_encode([
+            'user' => $user
+        ]));
+
+        return $response->withHeader('Content-Type', 'application/json');
+    }
 }

@@ -18,7 +18,7 @@ class UserApiTokenRepository extends BaseRepository
         );
     }
 
-    public function findByToken(string $token): ?array
+    public function findUserByToken(string $token): ?array
     {
         return $this->fetchOne(
             "SELECT t.*, u.name, u.email, u.role FROM user_api_tokens t 

@@ -10,6 +10,7 @@ $app->get('/', function (Request $request, Response $response) {
     return $response;
 });
 
-$app->post('/auth/login', [App\Controllers\AuthController::class, 'login']);
+$app->get('/auth/me',       [App\Controllers\AuthController::class, 'me']);
+$app->post('/auth/login',   [App\Controllers\AuthController::class, 'login']);
 
 $app->run();
