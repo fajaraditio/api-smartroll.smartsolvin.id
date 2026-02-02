@@ -45,9 +45,9 @@ class AuthService
         $hashedToken = hash('sha256', $token);
         $user = $this->tokens->findUserByToken($hashedToken);
 
-        if (!$user) {
-            return null;
-        }
+        logger('info', 'Fetching user by token', ['token' => $hashedToken, 'user' => $user]);
+
+        if (!$user) return null;
 
         return $user;
     }
@@ -60,7 +60,8 @@ class AuthService
             [
                 'expires' => time() + 60 * 60 * 24 * $this->tokenExpirationDays,
                 'path' => '/',
-                'secure' => true,
+                'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
+                'secure' => env('APP_ENV', 'production') === 'production',
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]
