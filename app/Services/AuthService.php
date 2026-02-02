@@ -44,8 +44,9 @@ class AuthService
     public function logout(): void
     {
         if (isset($_COOKIE['access_token'])) {
-            $rawToken = $_COOKIE['access_token'];
-            $hashedToken = hash('sha256', $rawToken);
+            $rawToken       = $_COOKIE['access_token'];
+            $hashedToken    = hash('sha256', $rawToken);
+
             $this->tokens->deleteToken($hashedToken);
         }
 

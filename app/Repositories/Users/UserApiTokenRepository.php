@@ -21,7 +21,7 @@ class UserApiTokenRepository extends BaseRepository
     public function findUserByToken(string $token): ?array
     {
         return $this->fetchOne(
-            "SELECT t.*, u.name, u.email, u.role FROM user_api_tokens t 
+            "SELECT t.id AS token_id, u.name, u.email, u.role FROM user_api_tokens t 
              JOIN users u ON t.user_id = u.user_id 
              WHERE t.token = :token AND (t.expires_at IS NULL OR t.expires_at > NOW())",
             ['token' => $token]
