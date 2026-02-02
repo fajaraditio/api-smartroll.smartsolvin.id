@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Users\UserApiTokenRepository;
 use App\Repositories\Users\UserRepository;
+use Exception;
 
 class AuthService
 {
@@ -22,7 +23,7 @@ class AuthService
         $user = $this->users->findByEmail($email);
 
         if (!$user || !password_verify($password, $user['password'])) {
-            throw new \Exception('Invalid credentials');
+            throw new Exception('Invalid credentials');
         }
 
         $rawToken = bin2hex(random_bytes(12));
