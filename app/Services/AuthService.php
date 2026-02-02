@@ -69,17 +69,27 @@ class AuthService
 
     public function removeCookie(): void
     {
-        setcookie(
-            'access_token',
-            '',
-            [
-                'expires' => time() - 3600,
-                'path' => '/',
-                'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
-                'secure' => env('APP_ENV', 'production') === 'production',
-                'httponly' => true,
-                'samesite' => 'Strict'
-            ]
-        );
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        session_destroy();
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+
+            setcookie(
+                'access_token',
+                '',
+                [
+                    'expires' => time() - 3600,
+                    'path' => '/',
+                    'domain' => env('APP_DOMAIN', 'smartroll.smartsolvin.id'),
+                    'secure' => env('APP_ENV', 'production') === 'production',
+                    'httponly' => true,
+                    'samesite' => 'Strict'
+                ]
+            );
+        }
     }
 }

@@ -59,16 +59,6 @@ class AuthController
     {
         $this->service->removeCookie();
 
-        $response = $response->withHeader(
-            'Set-Cookie',
-            sprintf(
-                'auth_token=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=%s; %sHttpOnly; SameSite=%s',
-                '/',
-                'Secure',
-                'Strict'
-            )
-        );
-
         $response->getBody()->write(json_encode([
             'message' => 'Logged out successfully'
         ]));
