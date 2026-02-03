@@ -6,9 +6,31 @@ use App\Repositories\BaseRepository;
 
 class RollRepository extends BaseRepository
 {
-    public function getAll(): array
+    public function getAll($perPage, $offset): array
     {
-        return $this->fetchAll("SELECT * FROM rolls");
+        return $this->fetchAll(
+            "SELECT
+                        id,
+                        name,
+                        width,
+                        length,
+                        thickness,
+                        color,
+                        price_per_meter,
+                        created_at,
+                        updated_at,
+                        JSON_ARRAY(
+                            CASE WHEN created_at >= NOW() - INTERVAL 7 DAY THEN 'New' ELSE NULL END,
+                            'Unused'
+                        ) AS statuses
+                    FROM rolls 
+                    ORDER BY created_at DESC
+                    LIMIT :perPage OFFSET :offset;",
+            [
+                'perPage' => $perPage,
+                'offset' => $offset
+            ]
+        );
     }
 
     public function count(): int
@@ -18,7 +40,25 @@ class RollRepository extends BaseRepository
 
     public function findById(int $id): ?array
     {
-        return $this->fetchOne("SELECT * FROM rolls WHERE id = :id", ['id' => $id]);
+        return $this->fetchOne(
+            "SELECT
+                id,
+                name,
+                width,
+                length,
+                thickness,
+                color,
+                price_per_meter,
+                created_at,
+                updated_at,
+                JSON_ARRAY(
+                    CASE WHEN created_at >= NOW() - INTERVAL 7 DAY THEN 'new' ELSE NULL END,
+                    'unused'
+                ) AS statuses
+            FROM rolls
+            WHERE id = :id",
+            ['id' => $id]
+        ) ?: null;
     }
 
     public function create(array $data): int
