@@ -72,13 +72,11 @@ class RollController
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         }
 
-        $response->getBody()->write(json_encode([
+        $response->getBody()->write(json_encode(array_merge([
             'success' => true,
             'page'    => $page,
             'per_page' => $perPage,
-            'data'    => $result['data'],
-            'total'   => $result['total']
-        ]));
+        ], $result)));
 
         return $response->withHeader('Content-Type', 'application/json');
     }

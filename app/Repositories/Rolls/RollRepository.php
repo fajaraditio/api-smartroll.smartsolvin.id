@@ -35,7 +35,9 @@ class RollRepository extends BaseRepository
 
     public function count(): int
     {
-        return $this->fetchOne("SELECT COUNT(*) as count FROM rolls")['count'] ?? 0;
+        $result = $this->fetchOne("SELECT COUNT(*) as count FROM rolls");
+
+        return $result ? (int) $result['count'] ?? 0 : 0;
     }
 
     public function findById(int $id): ?array

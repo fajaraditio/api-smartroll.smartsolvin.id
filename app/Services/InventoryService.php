@@ -53,8 +53,9 @@ class InventoryService extends BaseService
         $total = $this->rolls->count();
 
         return [
-            'data'  => $data,
-            'total' => $total
+            'data'          => $data,
+            'total'         => $total,
+            'total_pages'   => ceil($total / $perPage)
         ];
     }
 }
