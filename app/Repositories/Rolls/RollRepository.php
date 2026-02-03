@@ -17,8 +17,8 @@ class RollRepository extends BaseRepository
                         thickness,
                         color,
                         price_per_meter,
-                        created_at,
-                        updated_at,
+                        DATE(created_at) as created_at,
+                        DATE(updated_at) as updated_at,
                         JSON_ARRAY(
                             CASE WHEN created_at >= NOW() - INTERVAL 7 DAY THEN 'New' ELSE NULL END,
                             'Unused'
