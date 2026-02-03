@@ -2,21 +2,11 @@
 
 namespace App\Services;
 
-use App\Repositories\Users\UserApiTokenRepository;
-use App\Repositories\Users\UserRepository;
 use Exception;
 
-class AuthService
+class AuthService extends BaseService
 {
-    protected UserRepository $users;
-    protected UserApiTokenRepository $tokens;
     protected int $tokenExpirationDays = 30;
-
-    public function __construct(UserRepository $users, UserApiTokenRepository $tokens)
-    {
-        $this->users = $users;
-        $this->tokens = $tokens;
-    }
 
     public function login(string $email, string $password): array
     {
@@ -43,13 +33,9 @@ class AuthService
 
     public function logout(): void
     {
-        logger('info', 'Attempting to log out user');
-
         if (isset($_COOKIE['access_token'])) {
             $rawToken       = $_COOKIE['access_token'];
             $hashedToken    = hash('sha256', $rawToken);
-
-            logger('info', 'Logging out token: ' . $hashedToken);
 
             $this->tokens->deleteToken($hashedToken);
         }

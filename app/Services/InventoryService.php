@@ -2,18 +2,10 @@
 
 namespace App\Services;
 
-use App\Repositories\Rolls\RollRepository;
 use Exception;
 
-class InventoryService
+class InventoryService extends BaseService
 {
-    protected RollRepository $rolls;
-
-    public function __construct(RollRepository $rolls)
-    {
-        $this->rolls = $rolls;
-    }
-
     public function createRoll(array $data)
     {
         $data['color'] = $data['color'] ?? null;

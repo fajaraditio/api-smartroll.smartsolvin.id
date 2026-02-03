@@ -17,7 +17,6 @@ class RollController
         $this->inventoryService = $inventoryService;
     }
 
-
     public function getById(Request $request, Response $response, array $args = []): Response
     {
         $id = $args['id'] ?? $request->getAttribute('id') ?? null;
@@ -89,8 +88,9 @@ class RollController
         $data = json_decode((string) $request->getBody(), true) ?? [];
 
         $validator = new Validator();
+        $validator->addValidator('unique', new \App\Rules\UniqueRule($this->inventoryService->getPdo()));
         $validation = $validator->validate($data, [
-            'name'            => 'required',
+            'name'            => 'required|unique:rolls,name',
             'width'           => 'required|numeric|min:0.01',
             'length'          => 'required|numeric|min:0.01',
             'thickness'       => 'required|numeric|min:0.001',
@@ -185,7 +185,7 @@ class RollController
     public function delete(Request $request, Response $response, array $args = []): Response
     {
         $id = $args['id'] ?? $request->getAttribute('id') ?? null;
-        
+
         if (!$id) {
             $response->getBody()->write(json_encode([
                 'success' => false,
